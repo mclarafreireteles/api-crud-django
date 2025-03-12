@@ -39,7 +39,12 @@ def user_manager(request):
             if request.GET['user']:
                 user_nickname = request.GET['user']
 
-                user = User.objects.get(pk=user_nickname)
+                try:
+
+                    user = User.objects.get(pk=user_nickname)
+
+                except:
+                    return Response(status.HTTP_404_NOT_FOUND)
 
                 serializer = UserSerializer(user)
                 return Response(serializer.data)

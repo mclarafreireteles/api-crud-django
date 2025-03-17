@@ -40,9 +40,7 @@ def user_manager(request):
                 user_nickname = request.GET['user']
 
                 try:
-
                     user = User.objects.get(pk=user_nickname)
-
                 except:
                     return Response(status.HTTP_404_NOT_FOUND)
 
@@ -53,4 +51,14 @@ def user_manager(request):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+    if request.method == 'POST':
+        new_user = request.data
+        serializer = UserSerializer(data=new_user)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
                 
